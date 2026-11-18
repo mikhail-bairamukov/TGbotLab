@@ -43,13 +43,13 @@ func (c *Client) GetUpdates(offset int, limit int) ([]Update, error) {
 
 	data, err := c.doRequest(getUpdatesMethod, query)
 	if err != nil {
-		return nil, fmt.Errorf("%s: %s: %w", op, "c.doRequest", err)
+		return nil, fmt.Errorf("%s: failed to doRequest: %w", op, err)
 	}
 
 	var res UpdateResponse
 
 	if err := json.Unmarshal(data, &res); err != nil {
-		return nil, fmt.Errorf("%s: %s: %w", op, "json.Unmarshal", err)
+		return nil, fmt.Errorf("%s: failed to json.Unmarshal: %w", op, err)
 	}
 
 	return res.Result, nil
@@ -64,7 +64,7 @@ func (c *Client) SendMessage(chatID int, text string) error {
 
 	_, err := c.doRequest(sendMessageMethod, query)
 	if err != nil {
-		return fmt.Errorf("%s: %s: %w", op, "c.doRequest", err)
+		return fmt.Errorf("%s: failed to doRequest: %w", op, err)
 	}
 
 	return nil
@@ -83,20 +83,20 @@ func (c *Client) doRequest(method string, query url.Values) ([]byte, error) {
 
 	req, err := http.NewRequest(http.MethodGet, requestURL.String(), nil)
 	if err != nil {
-		return nil, fmt.Errorf("%s: %s: %w", op, "http.NewRequest", err)
+		return nil, fmt.Errorf("%s: failed to perform http.NewRequest: %w", op, err)
 	}
 
 	req.URL.RawQuery = query.Encode()
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("%s: %s: %w", op, "c.client.Do", err)
+		return nil, fmt.Errorf("%s: failed to perform client.Do request: %w", op, err)
 	}
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("%s: %s: %w", op, "read response body", err)
+		return nil, fmt.Errorf("%s: failed to read response body: %w", op, err)
 	}
 
 	return body, nil
