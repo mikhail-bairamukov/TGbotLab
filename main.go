@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/mikhail-bairamukov/TGbotStudy/telegram"
+	"github.com/mikhail-bairamukov/TGbotStudy/clients/telegram"
 )
 
 const (
@@ -17,9 +17,8 @@ func main() {
 	tgClient := telegram.New(tgBotHost, mustToken())
 	fmt.Printf("tgClient memory address: %p\n", &tgClient)
 
-	// tcGlient := telegram.New(token)
-
 	// fetcher := fetcher.New()
+
 	// processor := processor.New()
 
 	// consumer.Start(fetcher, processor)
